@@ -132,20 +132,20 @@ public class DetectDepth : MonoBehaviour {
         }
 
         //Check if Offest is not too large 
-        if ((xCoordOffset < thresholdTop && xCoordOffset > (thresholdTop * -1)) || (yCoordOffset < thresholdTop && yCoordOffset > (thresholdTop * -1)))
+        if ((xCoordOffset < thresholdTop && (xCoordOffset > (thresholdTop * -1))) && (yCoordOffset < thresholdTop && (yCoordOffset > (thresholdTop * -1))))
         {
             thresholdTopBool = true;
         }
 
         //if is in between thresholds
-        if(thresholdTopBool && thresholdBottomBool)
+        if (thresholdTopBool && thresholdBottomBool)
         {
             lastXcoord = xCoord;
             lastYcoord = yCoord;
-            //Debug.Log(xCoordOffset + " xOffset");
-            //Debug.Log(yCoordOffset + " yOffset");
+            Debug.Log(xCoordOffset + " xOffset");
+            Debug.Log(yCoordOffset + " yOffset");
             timer = 0;
-            Debug.Log("Timer reset");
+            //Debug.Log("Timer reset");
         }
 
 
@@ -167,6 +167,7 @@ public class DetectDepth : MonoBehaviour {
         //Vector3 newPos = new Vector3(xCoord, gameObject.transform.position.y, yCoord);
         //Vector3 newPos = new Vector3(gameObject.transform.position.x + xCoordOffset, 0, gameObject.transform.position.z + yCoordOffset);
         Vector3 newPos = new Vector3(gameObject.transform.position.x + xCoordOffset, 0, 0);
+        //Vector3 newPos = new Vector3(-195, 0, gameObject.transform.position.z + (yCoordOffset*2));
 
         // 0.3f = maxDistanceDelta => Pro Call 0.3 Units in Richtung Ziel -> Optimal Zeitwert mitreinmultiplizieren TODO
         // eventuell Lerp benutzen
@@ -182,8 +183,8 @@ public class DetectDepth : MonoBehaviour {
             //gameObject.transform.position = Vector3.MoveTowards(oldPos, newPos, latency * Time.deltaTime);
             //gameObject.transform.position = newPos;
             timer += Time.deltaTime;
-            Debug.Log(Time.deltaTime + " delta");
-            Debug.Log(timer + " timer");
+            //Debug.Log(Time.deltaTime + " delta");
+            //Debug.Log(timer + " timer");
             transform.position = Vector3.Lerp(oldPos, newPos, timer / latency);
         }
 
