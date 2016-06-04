@@ -59,45 +59,8 @@ public class DetectDepth : MonoBehaviour {
         }
         */
 
-        /*int width = 512;
-        int[] getArray;
-        int[] getArray2;
-
-        if (!SetupFinished)
-        {
-            int maxValue = distances.Min();
-            int maxIndex = distances.ToList().IndexOf(distances.Min());
-
-            getArray = checkForContrast(maxIndex, maxValue, width, distances);
-            int xCoord2 = getArray[0];
-            int ýCoord2 = getArray[1];
-
-            String xCoord2toString = xCoord2.ToString();
-            String yCoord2toString = ýCoord2.ToString();
-
-            String concatString = yCoord2toString + xCoord2toString;
-            concatStringInt = Int32.Parse(concatString);
-            SetupFinished = true;
-        }
-
-        getArray2 = getElementsAroundHighValue(concatStringInt, width, distances);
-        
-        for(int j = 0; j < distances.Length; j++)
-        {
-            if(!getArray2.Contains(j))
-            {
-                distances[j] = 0;
-            }
-        }
-
-        int newMaxValue = (int) distances.Min();
-        int newMaxIndex = (int)distances.ToList().IndexOf(distances.Min());
-        concatStringInt = newMaxIndex;
-        int yCoord = (int)(newMaxIndex / width);
-        int xCoord = newMaxIndex % width;
-        */
-        int maxValue;
-        int maxIndex;
+        //int maxValue;
+        //int maxIndex;
 
         // maxValue = (int) distances.Min();
         // maxIndex = (int) distances.ToList().IndexOf(distances.Min());
@@ -117,10 +80,34 @@ public class DetectDepth : MonoBehaviour {
                     minValue = distances[y * width + x];
                     xCoord = x;
                     yCoord = y;
+                    timer = 0;
                 }
             }
 
-        Debug.Log("(x,y)= " + xCoord + "," + yCoord + " = " + minValue);
+        //Debug.Log("(x,y)= " + xCoord + "," + yCoord + " = " + minValue);
+
+        xCoord = xCoord - 256;
+        yCoord = (yCoord - 212) * 2;
+
+        if(xCoord < -230)
+        {
+            xCoord = -230;
+        }
+
+        if(xCoord > 230)
+        {
+            xCoord = 230;
+        }
+
+        if(yCoord < -350)
+        {
+            yCoord = -350;
+        }
+
+        if(yCoord > 350)
+        {
+            yCoord = 350;
+        }
 
         //y-Coord
         // int yCoord = (int)(maxIndex / width);
@@ -142,6 +129,7 @@ public class DetectDepth : MonoBehaviour {
             return;
         }
 
+        /*
         bool thresholdBottomBool = false;
         bool thresholdTopBool = false;
 
@@ -162,11 +150,12 @@ public class DetectDepth : MonoBehaviour {
         {
             lastXcoord = xCoord;
             lastYcoord = yCoord;
-            Debug.Log(xCoordOffset + " xOffset");
+            //Debug.Log(xCoordOffset + " xOffset");
             Debug.Log(yCoordOffset + " yOffset");
             timer = 0;
             //Debug.Log("Timer reset");
         }
+        */
 
 
         /*
@@ -180,14 +169,14 @@ public class DetectDepth : MonoBehaviour {
         */
         //Debug.Log(offset);
 
-        //float ElapsedTime = 0.0f;
-        //float FinishTime = 60f;
-
         Vector3 oldPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
-        //Vector3 newPos = new Vector3(xCoord, gameObject.transform.position.y, yCoord);
+        Vector3 newPos = new Vector3(xCoord, gameObject.transform.position.y, yCoord);
+        Debug.Log("newPos: x=" + newPos.x + " z=" + newPos.z);
+        timer += Time.deltaTime;
+        transform.position = Vector3.Lerp(oldPos, newPos, timer / latency);
+
+        /*
         //Vector3 newPos = new Vector3(gameObject.transform.position.x + xCoordOffset, 0, gameObject.transform.position.z + yCoordOffset);
-        Vector3 newPos = new Vector3(gameObject.transform.position.x + xCoordOffset, 0, 0);
-        //Vector3 newPos = new Vector3(-195, 0, (gameObject.transform.position.x *2)); //from Top
         float newZCoord = gameObject.transform.position.z + (xCoordOffset * 2);
         if(newZCoord > 310 || newZCoord < -310)
         {
@@ -201,15 +190,8 @@ public class DetectDepth : MonoBehaviour {
             }
             //Debug.Log("yOffset FIX!");
         }
-        //Vector3 newPos = new Vector3(-195, 0, newZCoord);
-
-        // 0.3f = maxDistanceDelta => Pro Call 0.3 Units in Richtung Ziel -> Optimal Zeitwert mitreinmultiplizieren TODO
-        // eventuell Lerp benutzen
-        //ElapsedTime += Time.deltaTime;
-        //float start = Time.time;
-
-        //float length = Vector3.Distance(oldPos, newPos);
-
+        */
+        /*
         if (thresholdTopBool && thresholdBottomBool)
         {
             //gameObject.transform.position = Vector3.Lerp(oldPos, newPos, latency * Time.deltaTime);
@@ -222,13 +204,9 @@ public class DetectDepth : MonoBehaviour {
             //Debug.Log(timer + " timer");
             transform.position = Vector3.Lerp(oldPos, newPos, timer / latency);
         }
+        */
+    }
 
-        //Debug.Log(oldPos + " old");
-        //Debug.Log(newPos + " new");
-
-     
-    } 
-    
     public int[] checkForContrast(int indexOfLargestInArray, int largestInArray, int width, ushort[]array)
     {
         bool inArrayBoundsFirst = true;
